@@ -228,7 +228,7 @@ class pakkelabels_shipping extends CarrierModule
     {
         // Get default language
         $default_lang = (int) Configuration::get('PS_LANG_DEFAULT');
-        $allcarriers = Carrier::getCarriers($default_lang, false, false, false, null, ALLcarriers);
+        $allcarriers = Carrier::getCarriers($default_lang, false, false, false, null, ALL_CARRIERS);
         $carriers = array();
 
         foreach ($allcarriers as $carrier) {
