@@ -9,7 +9,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class PakkelabelsShipping extends CarrierModule
+class pakkelabels_shipping extends CarrierModule
 {
     const PREFIX = 'pakkelabels_shipping_';
     protected $hooks = array(
@@ -599,11 +599,11 @@ class PakkelabelsShipping extends CarrierModule
         }
         return false;
     }
-    public function getOrderShippingCost()
+    public function getOrderShippingCost($params, $shipping_cost)
     {
         return false;
     }
-    public function getOrderShippingCostExternal()
+    public function getOrderShippingCostExternal($params)
     {
         return $this->getOrderShippingCost();
     }
