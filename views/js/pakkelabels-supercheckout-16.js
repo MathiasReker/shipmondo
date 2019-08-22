@@ -23,16 +23,22 @@ var usedZipCode = '';
 var usedAgent = '';
 var gotError = '';
 var defaultZipcode = '';
+var defaultAddress = '';/** Roohi **/
 
-function getShopList(shipping_agent, zipcode) {
+/** Roohi **/
+function getShopList(shipping_agent, zipcode, address) {
     var myZipcode = zipcode;
-
-    if(usedZipCode == zipcode && usedAgent == shipping_agent){
+	
+   /*  if(usedZipCode == zipcode && usedAgent == shipping_agent){
         if(gotError !== ''){
-            alert(gotError);
+           // $("#selected_shop_context").html(gotError);
+			$(".error_msg").html(gotError);
+			
             return false;
         }
+		console.log(2);
         jQuery('#Pakkelabels_zipcode_field').removeAttr("disabled");
+        jQuery('#Pakkelabels_address_field').removeAttr("disabled");
         jQuery('#pakkelabels_find_shop_btn').removeAttr("disabled");
 		if(iPakkelabels_ID_WINDOW=='Popup') {
 			jQuery('#pakkelabel-modal').modal({
@@ -51,7 +57,7 @@ function getShopList(shipping_agent, zipcode) {
         usedZipCode = zipcode;
         usedAgent = shipping_agent;
         gotError = '';
-    }
+    } */
 
     markerIcon =  shipping_agent + '.png';
 	laoding = '<img src="'+baseDir+'modules/pakkelabels_shipping/views/img/loadiing.gif" class="loading_drop">';
@@ -60,7 +66,7 @@ function getShopList(shipping_agent, zipcode) {
     jQuery.ajax({
         url: baseDir + 'modules/pakkelabels_shipping/ajax.php',
         type: 'POST',
-        data: { 'method': 'ajaxGetShopList', 'sShippinAgent': shipping_agent, 'iZipcode': zipcode },
+        data: { 'method': 'ajaxGetShopList', 'sShippinAgent': shipping_agent, 'iZipcode': zipcode, 'iAddress': address },
        // dataType: 'json',
         success: function(response)
         {
@@ -73,12 +79,22 @@ function getShopList(shipping_agent, zipcode) {
                 if(returned.status == false)
                 {
                     gotError = returned.error;
-                    alert(returned.error);
+					 jQuery(".loading_radio").hide();
+                   
+					$(".error_msg").html(gotError);
+					return false;
                 } else if(returned.status = true)
                 {
 					if (returned.frontendoption == 'dropdown') {
                         setTimeout(function()
                         {
+                           jQuery('.pakkelabels-shoplist').append(returned.shoplist);
+                           jQuery('.pakkelabels-shoplist').addClass('open');
+                        }, 1000) 
+                    }else if (returned.frontendoption == 'radio') {
+                        setTimeout(function()
+                        {
+							 jQuery(".loading_radio").hide();
                            jQuery('.pakkelabels-shoplist').append(returned.shoplist);
                            jQuery('.pakkelabels-shoplist').addClass('open');
                         }, 1000) 
@@ -130,11 +146,14 @@ function getShopList(shipping_agent, zipcode) {
             } else {;
                 jQuery('#Pakkelabels_zipcode_field').prop("disabled",false);
                 jQuery('#pakkelabels_find_shop_btn').prop("disabled",false);
-                alert(returned.error);
+                //$(".error_msg").html(returned.error);
+				$(".error_msg").html(returned.error);
+				return false;
             }
         }
     });
 }
+/** Roohi code ends **/
 
 function saveCartdetails()
 {
@@ -186,7 +205,9 @@ function saveCartdetails()
                             }
 							
 						} else if (response.status == "error") {
-			                alert(error_no_shop_selected);
+			                //$("#selected_shop_context").html(error_no_shop_selected);
+							$(".error_msg").html(error_no_shop_selected);
+							return false;
 			            }
 
 					}
@@ -208,7 +229,9 @@ function saveCartdetails()
 
                         }
                         else if (response.status == "error") {
-                            alert(error_no_shop_selected);
+                           // $(".error_msg").html(error_no_shop_selected);
+							$(".error_msg").html(error_no_shop_selected);
+							return false;
                         }
                     }
                 });
@@ -283,6 +306,7 @@ function loadMarker(markerData)
 
             //adds the shop information to the #selected_shop div
             jQuery('#selected_shop_header').html(selected_shop_header);
+			 jQuery('#selected_shop_wrapper').addClass("add_border");
         }
     })(marker));
     bounds.extend(marker.position);
@@ -310,6 +334,7 @@ function li_addlistener_open_marker(eventElement)
             jQuery('#hidden_choosen_shop').attr('shopid', event['context'].getAttribute('data-shopid'));
             //adds the shop information to the #selected_shop div
             jQuery('#selected_shop_header').html(selected_shop_header);
+			 jQuery('#selected_shop_wrapper').addClass("add_border");
             jQuery('#selected_shop_context').html(eventElement['context']['childNodes'][1].innerHTML);
             
     		jQuery('#supercheckout_confirm_order_disabled').remove();
@@ -327,11 +352,15 @@ function li_addlistener_open_marker(eventElement)
 jQuery(window).on('load', function() { //jQuery(document).ready(function () {
     //html to be injected into the prestashop
     var sModalHTML = '<div class="pakkelabel-modal fade-pakkelabel" id="pakkelabel-modal" tabindex="-1" role="dialog" aria-labelledby="packetshop window"> <div class="pakkelabel-modal-dialog" role="document"> <div class="pakkelabel-modal-content"> <div class="pakkelabel-modal-header"> <h4 class="pakkelabel-modal-title" id="pakkelabel-modal-header-h4">'+ sPakkelabel_modal_header_h4 +'</h4> <button id="pakkelabel-modal-header-button"type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> <div class="pakkelabel-open-close-button-wrap"> <div class="pakkelabel-open-close-button pakkelabel-open-map">'+ sPakkelabel_open_map +'</div> <div class="pakkelabel-open-close-button pakkelabel-hide-map">'+ sPakkelabel_hide_map +'</div> </div></div> <div class="pakkelabel-modal-body"> <div id="pakkelabel-map-wrapper"></div> <div id="pakkelabel-list-wrapper"></div> </div> <div class="pakkelabel-modal-footer"> <button id="choose-stop-btn" type="button" class="button button-small btn btn-default" data-dismiss="modal">'+ sChoose_stop_btn +'</button> <div class="powered-by-pakkelabels">Powered by</div> </div> </div> </div> </div>';
+	/** Roohi **/
 	if(iPakkelabels_ID_WINDOW=='Popup') {
-		var sZipcodeHTML = '<div class="pakkelabels_shipping_field-wrap" id="pakkelabels-zipcode-wrapper"> <div class="pakkelabels_shipping_field"> <div class="pakkelabels-clearfix" id="pakkelabels_shipping_button"> <div class="pakkelabels_stores"> <div> <input type="text" id="Pakkelabels_zipcode_field" name="pakkelabels_zipcode" class="input" placeholder="'+sPakkelabels_zipcode_field+'"> </div> <div> <input type="button" id="pakkelabels_find_shop_btn" name="pakkelabel_find_shop" class="button button-small btn btn-default" value="'+ sPakkelabels_find_shop_btn_text +'"> </div> </div> </div> <div id="hidden_choosen_shop" type="hidden"></div><div class="pakkelabels-clearfix" id="selected_shop_wrapper"> <div class="pakkelabels-clearfix" id="selected_shop_header">'+ sSelected_shop_header +'</div> <div class="pakkelabels-clearfix" id="selected_shop_context"> </div> </div> </div> </div>';
+		var sZipcodeHTML = '<div class="pakkelabels_shipping_field-wrap" id="pakkelabels-zipcode-wrapper"> <div class="pakkelabels_shipping_field"> <div class="pakkelabels-clearfix" id="pakkelabels_shipping_button"> <div class="pakkelabels_stores"> <div> <div class="error_msg"></div><input type="hidden" id="Pakkelabels_zipcode_field" name="pakkelabels_zipcode" class="input" placeholder="'+sPakkelabels_zipcode_field+'"> <input type="hidden" id="Pakkelabels_address_field" name="pakkelabels_address" class="input" placeholder="'+sPakkelabels_address_field+'"> </div> <div> <input type="button" id="pakkelabels_find_shop_btn" name="pakkelabel_find_shop" class="button button-small btn btn-default" value="'+ sPakkelabels_find_shop_btn_text +'"> </div> </div> </div> <div id="hidden_choosen_shop" type="hidden"></div><div class="pakkelabels-clearfix" id="selected_shop_wrapper"> <div class="pakkelabels-clearfix" id="selected_shop_header">'+ sSelected_shop_header +'</div> <div class="pakkelabels-clearfix" id="selected_shop_context"> </div> </div> </div> </div>';
+	}else if(iPakkelabels_ID_WINDOW=='radio') {
+		var sZipcodeHTML = '<div class="pakkelabels_shipping_field-wrap" id="pakkelabels-zipcode-wrapper"> <div class="pakkelabels_shipping_field"> <div class="pakkelabels-clearfix" id="pakkelabels_shipping_button"> <div class="pakkelabels_stores"> <div> <div class="error_msg"></div><input type="hidden" id="Pakkelabels_zipcode_field" name="pakkelabels_zipcode" class="input" placeholder="'+sPakkelabels_zipcode_field+'"> <input type="hidden" id="Pakkelabels_address_field" name="pakkelabels_address" class="input" placeholder="'+sPakkelabels_address_field+'"> </div> <div class="pakkelabels-shoplist"> </div> </div> </div> <div id="hidden_choosen_shop" type="hidden"></div><div class="pakkelabels-clearfix" id="selected_shop_wrapper" style="display:none;"> <div class="pakkelabels-clearfix" id="selected_shop_header">'+ sSelected_shop_header +'</div> <div class="pakkelabels-clearfix" id="selected_shop_context"> </div> </div> </div> </div>';
 	} else {
-		var sZipcodeHTML = '<div class="pakkelabels_shipping_field-wrap" id="pakkelabels-zipcode-wrapper"> <div class="pakkelabels_shipping_field"> <div class="pakkelabels-clearfix" id="pakkelabels_shipping_button"> <div class="pakkelabels_stores"> <div> <input type="text" id="Pakkelabels_zipcode_field" name="pakkelabels_zipcode" class="input" placeholder="'+sPakkelabels_zipcode_field+'"> </div> <div class="pakkelabels-shoplist dropdown"><button class="btn btn-primary dropdown-toggle" id="pakkelabels_find_shop_btn" type="button" data-toggle="dropdown">' + sPakkelabels_find_shop_btn_text + '<span class="caret"></span></button> </div> </div> </div> <div id="hidden_choosen_shop" type="hidden"></div><div class="pakkelabels-clearfix" id="selected_shop_wrapper"> <div class="pakkelabels-clearfix" id="selected_shop_header">'+ sSelected_shop_header +'</div> <div class="pakkelabels-clearfix" id="selected_shop_context"> </div> </div> </div> </div>';
+		var sZipcodeHTML = '<div class="pakkelabels_shipping_field-wrap" id="pakkelabels-zipcode-wrapper"> <div class="pakkelabels_shipping_field"> <div class="pakkelabels-clearfix" id="pakkelabels_shipping_button"> <div class="pakkelabels_stores"> <div> <div class="error_msg"></div><input type="hidden" id="Pakkelabels_zipcode_field" name="pakkelabels_zipcode" class="input" placeholder="'+sPakkelabels_zipcode_field+'"><input type="hidden" id="Pakkelabels_address_field" name="pakkelabels_address" class="input" placeholder="'+sPakkelabels_address_field+'"> </div> <div class="pakkelabels-shoplist dropdown"><button class="btn btn-primary dropdown-toggle" id="pakkelabels_find_shop_btn" type="button" data-toggle="dropdown">' + sPakkelabels_find_shop_btn_text + '<span class="caret"></span></button> </div> </div> </div> <div id="hidden_choosen_shop" type="hidden"></div><div class="pakkelabels-clearfix" id="selected_shop_wrapper"> <div class="pakkelabels-clearfix" id="selected_shop_header">'+ sSelected_shop_header +'</div> <div class="pakkelabels-clearfix" id="selected_shop_context"> </div> </div> </div> </div>';
 	}
+	/** Roohi code ends **/
     var sHiddenSelectedHTML = '<div style="display:none !important;"><div class="hidden_primary_address"></div><div id="hidden_selected_shop_context"></div><div id="hidden_last_choosen_carrier" carrier_id=""></div><div id="hidden_last_choosen_carrier_radio" carrier_id=""></div></div>'
     //appends the modal to the body of the prestashop checkout page
 
@@ -340,6 +369,7 @@ jQuery(window).on('load', function() { //jQuery(document).ready(function () {
 
     //if a pakkelabels.dk shipping method choosen on pageload, add the zipcode div
     var checked_shipping = jQuery('#shipping-method input[type="radio"]:checked').val();
+	console.log(checked_shipping);
     if (checked_shipping) {
 		// remove comma from shipping value
 		checked_shipping = checked_shipping.replace(',','');
@@ -351,24 +381,43 @@ jQuery(window).on('load', function() { //jQuery(document).ready(function () {
 		   	jQuery('<tr class="pakkelabels-choose-shop"><td colspan="'+tds+'" style="width:100%">'+sZipcodeHTML+'</td></tr>').insertAfter(tempVar);
 
 			// Hide buy button and show other button
-		    jQuery('#supercheckout_confirm_order_disabled').remove();
+			/* Roohi*/
+		  
 			var final_button = jQuery("#supercheckout_confirm_order");
+			
 			var final_button_parent = jQuery(final_button).parent();
 			jQuery("#supercheckout_confirm_order").hide();
+			if(jQuery("#supercheckout_confirm_order_disabled").length<=0)//Roohi
 			jQuery(final_button_parent).append('<div id="supercheckout_confirm_order_disabled" class="orangebutton">'+sPakkelabel_modal_header_h4+'</div>');
-		
+			/* Roohi code ends*/
 			// Add zipcode from customer address
+			if(jQuery('input[name="shipping_address[postcode]"]').val()!=''){
+				defaultZipcode=jQuery('input[name="shipping_address[postcode]"]').val();
+			}
+			if(jQuery('input[name="shipping_address[address1]"]').val()){
+				defaultAddress=jQuery('input[name="shipping_address[address1]"]').val();
+			}
 			if (defaultZipcode) {
 				jQuery('#Pakkelabels_zipcode_field').val(defaultZipcode);
-			} else {
+			}
+			/** Roohi **/
+			if (defaultAddress) {
+				jQuery('#Pakkelabels_address_field').val(defaultAddress);
+			}
+			
+			if(defaultZipcode=='' && defaultAddress=='') {
 				if (jQuery('#shipping-address-new').is(':checked')) {
 						zipcode = jQuery('input[name="shipping_address[postcode]"]').val();
 						jQuery('#Pakkelabels_zipcode_field').val(zipcode);
+						address = jQuery('input[name="shipping_address[address1]"]').val();
+						jQuery('#Pakkelabels_address_field').val(address);
 				} else {
 					if (typeof formatedAddressFieldsValuesList === 'undefined' || formatedAddressFieldsValuesList == null ) {
 						// Check if we got an input field
 						zipcode = jQuery('input[name="shipping_address[postcode]"]').val();
 						jQuery('#Pakkelabels_zipcode_field').val(zipcode);
+						address = jQuery('input[name="shipping_address[address1]"]').val();
+						jQuery('#Pakkelabels_address_field').val(address);
 					} else {
 						var id_delivery = jQuery('select[name="shipping_address_id"]').val();
 						var address_data = formatedAddressFieldsValuesList[id_delivery];
@@ -377,14 +426,35 @@ jQuery(window).on('load', function() { //jQuery(document).ready(function () {
 							if (address_data.formated_fields_values.postcode) {
 									jQuery('#Pakkelabels_zipcode_field').val(address_data.formated_fields_values.postcode);
 							}
+							if (address_data.formated_fields_values.address1) {
+									jQuery('#Pakkelabels_address_field').val(address_data.formated_fields_values.address1);
+							}
 						} else {
 							// Check if we got an input field
 							zipcode = jQuery('input[name="shipping_address[postcode]"]').val();
 							jQuery('#Pakkelabels_zipcode_field').val(zipcode);
+							address = jQuery('input[name="shipping_address[address1]"]').val();
+							jQuery('#Pakkelabels_address_field').val(address);
+						}
+					}
+					if(iPakkelabels_ID_WINDOW=='radio') {
+						jQuery(".loading_radio").show();
+						if(checked_shipping == iPakkelabels_ID_GLS ){
+						getShopList('gls', jQuery('#Pakkelabels_zipcode_field').val(),jQuery('#Pakkelabels_address_field').val());
+						}
+						if(checked_shipping == iPakkelabels_ID_DAO){
+						getShopList('dao', jQuery('#Pakkelabels_zipcode_field').val(),jQuery('#Pakkelabels_address_field').val());
+						}
+						if(checked_shipping == iPakkelabels_ID_POSTNORD){
+						getShopList('pdk', jQuery('#Pakkelabels_zipcode_field').val(),jQuery('#Pakkelabels_address_field').val());
+						}
+						if(checked_shipping == iPakkelabels_ID_BRING){
+						getShopList('bring', jQuery('#Pakkelabels_zipcode_field').val(),jQuery('#Pakkelabels_address_field').val());
 						}
 					}
 				}
 			}
+			/** Roohi code ends **/
 		} else {
 			jQuery('#supercheckout_confirm_order_disabled').remove();
 			jQuery("#supercheckout_confirm_order").show();
@@ -397,6 +467,26 @@ jQuery(window).on('load', function() { //jQuery(document).ready(function () {
         jQuery('#hidden_last_choosen_carrier_radio').attr('carrier_id', jQuery('#shipping-method input[type="radio"]:checked').val());
         jQuery('#hidden_last_choosen_carrier').attr('carrier_id', '');
         jQuery('#hidden_selected_shop_context').html("");
+		 var checked_shipping = jQuery('#shipping-method input[type="radio"]:checked').val();
+		if (checked_shipping) {
+			// remove comma from shipping value
+			checked_shipping = checked_shipping.replace(',','');
+			if(iPakkelabels_ID_WINDOW=='radio') {
+				jQuery(".loading_radio").show();
+				if(checked_shipping == iPakkelabels_ID_GLS ){
+				getShopList('gls', jQuery('#Pakkelabels_zipcode_field').val(),jQuery('#Pakkelabels_address_field').val());
+				}
+				if(checked_shipping == iPakkelabels_ID_DAO){
+				getShopList('dao', jQuery('#Pakkelabels_zipcode_field').val(),jQuery('#Pakkelabels_address_field').val());
+				}
+				if(checked_shipping == iPakkelabels_ID_POSTNORD){
+				getShopList('pdk', jQuery('#Pakkelabels_zipcode_field').val(),jQuery('#Pakkelabels_address_field').val());
+				}
+				if(checked_shipping == iPakkelabels_ID_BRING){
+				getShopList('bring', jQuery('#Pakkelabels_zipcode_field').val(),jQuery('#Pakkelabels_address_field').val());
+				}
+			}
+		}
     });
 
     //Called when the prestashop reloads all the shipping LIs and stuff, and adds the zipcode div
@@ -411,18 +501,21 @@ jQuery(window).on('load', function() { //jQuery(document).ready(function () {
 		    
 		        if( checked_shipping == iPakkelabels_ID_GLS || checked_shipping == iPakkelabels_ID_DAO || checked_shipping == iPakkelabels_ID_POSTNORD || checked_shipping == iPakkelabels_ID_BRING) {      
 		        	// Reset used zipcode from latest search
-				   	usedZipCode = '';
+				   	//usedZipCode = '';
 		        
 		            tempVar = jQuery('#shipping-method input[type="radio"]:checked').closest('.highlight');  
 					var tds = jQuery('td', tempVar).length;
 				
 					// Hide buy button and show other button
-			        jQuery('#supercheckout_confirm_order_disabled').remove();
+					
+			     
 					var final_button = jQuery("#supercheckout_confirm_order");
 					var final_button_parent = jQuery(final_button).parent();
+					
 					jQuery("#supercheckout_confirm_order").hide();
+					if(jQuery("#supercheckout_confirm_order_disabled").length<=0) //Roohi
 					jQuery(final_button_parent).append('<div id="supercheckout_confirm_order_disabled" class="orangebutton">'+sPakkelabel_modal_header_h4+'</div>');
-				
+					
 				   	jQuery('<tr class="pakkelabels-choose-shop"><td colspan="'+tds+'" style="width:100%">'+sZipcodeHTML+'</td></tr>').insertAfter(tempVar);
 		           	
 		            if(jQuery('#cgv').is(':checked'))
@@ -439,15 +532,24 @@ jQuery(window).on('load', function() { //jQuery(document).ready(function () {
 			    // Add zipcode from customer address
                             if (defaultZipcode) {
                                 jQuery('#Pakkelabels_zipcode_field').val(defaultZipcode);
-                            } else {
+                            }
+							/** Roohi  **/
+							if (defaultAddress) {
+                                jQuery('#Pakkelabels_address_field').val(defaultAddress);
+                            }							
+							if(defaultAddress=='' && defaultZipcode==''){
                                 if (jQuery('#shipping-address-new').is(':checked')) {
                                         zipcode = jQuery('input[name="shipping_address[postcode]"]').val();
                                         jQuery('#Pakkelabels_zipcode_field').val(zipcode);
+										address = jQuery('input[name="shipping_address[address1]"]').val();
+                                        jQuery('#Pakkelabels_address_field').val(address);
                                 } else {
 									if (typeof formatedAddressFieldsValuesList === 'undefined' || formatedAddressFieldsValuesList== null) {
 											// Check if we got an input field
 											zipcode = jQuery('input[name="shipping_address[postcode]"]').val();
 											jQuery('#Pakkelabels_zipcode_field').val(zipcode);
+											address = jQuery('input[name="shipping_address[address1]"]').val();
+											jQuery('#Pakkelabels_address_field').val(address);
 									} else {
 										var id_delivery = jQuery('select[name="shipping_address_id"]').val();
 										var address_data = formatedAddressFieldsValuesList[id_delivery];
@@ -456,14 +558,21 @@ jQuery(window).on('load', function() { //jQuery(document).ready(function () {
 											if (address_data.formated_fields_values.postcode) {
 													jQuery('#Pakkelabels_zipcode_field').val(address_data.formated_fields_values.postcode);
 											}
+											if (address_data.formated_fields_values.address1) {
+													jQuery('#Pakkelabels_address_field').val(address_data.formated_fields_values.address1);
+											}
 										} else {
 											// Check if we got an input field
 											zipcode = jQuery('input[name="shipping_address[postcode]"]').val();
 											jQuery('#Pakkelabels_zipcode_field').val(zipcode);
+											address = jQuery('input[name="shipping_address[address1]"]').val();
+											jQuery('#Pakkelabels_address_field').val(address);
 										}
 									}
 								}
 							}
+							
+						/** Roohi code ends **/
 
 		        } else {
 					jQuery('#supercheckout_confirm_order_disabled').remove();
@@ -484,7 +593,7 @@ jQuery(window).on('load', function() { //jQuery(document).ready(function () {
 				// Check billing address for DAO, GLS or PDK
 				var packetinfo = jQuery('.pakkelabels-Packetshop').text();											
 				if (packetinfo.indexOf('ID: GLS') == -1 && packetinfo.indexOf('ID: PDK') == -1 && packetinfo.indexOf('ID: DAO') == -1 && packetinfo.indexOf('ID: BRING') == -1) {
-					alert('Du har valgt et ugyldigt afhentningssted'); // Maybe scroll to invoice address fields
+					$(".error_msg").html('Du har valgt et ugyldigt afhentningssted'); // Maybe scroll to invoice address fields
 					return;
 				}	            
 	        } 
@@ -524,13 +633,13 @@ jQuery(window).on('load', function() { //jQuery(document).ready(function () {
             defaultZipcode = jQuery('#Pakkelabels_zipcode_field').val();
             
             jQuery('#hidden_last_choosen_carrier').attr('carrier_id', iPakkelabels_choosen_delivery_option)
-            getShopList(sChoosenShippingAgent, jQuery('#Pakkelabels_zipcode_field').val());
-            //jQuery('#Pakkelabels_zipcode_field').prop("disabled",true);
-            //jQuery('#pakkelabels_find_shop_btn').prop("disabled",true);
+		
+            getShopList(sChoosenShippingAgent, jQuery('#Pakkelabels_zipcode_field').val(),jQuery('#Pakkelabels_address_field').val());	/** Roohi **/
+            
        /* }
         else
         {
-            alert(error_login_before)
+            $("#selected_shop_context").html(error_login_before)
         } */
     })
 
@@ -560,7 +669,7 @@ jQuery(window).on('load', function() { //jQuery(document).ready(function () {
 				defaultZipcode = jQuery('#Pakkelabels_zipcode_field').val();
 
                 jQuery('#hidden_last_choosen_carrier').attr('carrier_id', iPakkelabels_choosen_delivery_option)
-                getShopList(sChoosenShippingAgent, jQuery('#Pakkelabels_zipcode_field').val());
+                getShopList(sChoosenShippingAgent, jQuery('#Pakkelabels_zipcode_field').val(),jQuery('#Pakkelabels_address_field').val());
                 jQuery('#Pakkelabels_zipcode_field').blur();
                 jQuery('#Pakkelabels_zipcode_field').prop("disabled", true);
                 jQuery('#pakkelabels_find_shop_btn').prop("disabled", true);
@@ -629,8 +738,12 @@ jQuery(window).on('load', function() { //jQuery(document).ready(function () {
     {
         if(jQuery('.delivery_option_radio:checked').val() != iPakkelabels_ID_GLS+',' && jQuery('.delivery_option_radio:checked').val() != iPakkelabels_ID_DAO+',' && jQuery('.delivery_option_radio:checked').val() != iPakkelabels_ID_POSTNORD+',' && jQuery('.delivery_option_radio:checked').val() != iPakkelabels_ID_BRING+',')
         {
+			 jQuery('#pakkelabels-zipcode-wrapper').remove();
+			 		jQuery('#selected_shop_wrapper').removeClass("add_border");
+
             if(jQuery('.hidden_primary_address').children().length != 0)
             {
+				
                 sFullName = jQuery('.hidden_primary_address > .hidden_primary_firstname').text();
                 sCompany = jQuery('.hidden_primary_address > .hidden_primary_company').text();
                 sAddress1 = jQuery('.hidden_primary_address > .hidden_primary_address1').text();
@@ -701,6 +814,14 @@ jQuery(window).on('load', function() { //jQuery(document).ready(function () {
             jQuery('#pakkelabels_find_shop_btn').prop("disabled", true);
         }
     });
+	
+
+
+
+
+
+
+
 });
 
 

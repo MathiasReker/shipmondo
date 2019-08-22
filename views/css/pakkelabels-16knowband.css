@@ -207,7 +207,7 @@ ul.pakkelabels-shoplist-ul li.pakkelabels-shop-list:nth-last-of-type(2) {
 }
 .pakkelabels-single-shop {
 	position:relative;
-	font-size: 16px;
+	font-size: 12px;
 	line-height: 1.5em;
 }
 .pakkelabels-single-shop .pakkelabels-radio-button{
@@ -440,13 +440,12 @@ ul.pakkelabels-shoplist-ul li.pakkelabels-shop-list:nth-last-of-type(2) {
 	background-color:#2e7a3a;
 	border:solid 1px #358c43;
 }
-.pakkelabels-shoplist .selected_content{font-size:12px;}
-.pakkelabels-shoplist-dropdownul.dropdown-menu{height:710px;overflow-y:scroll;overflow-x:hidden;}
 
-#selected_shop_wrapper{border:0px;}
-.loading_radio{width:26px;}
+.pakkelabels-shoplist-dropdownul.dropdown-menu{height:700px;overflow-y:scroll;overflow-x:hidden;}
 #header{z-index:auto;}
-
+#selected_shop_wrapper.add_border{border:1px solid rgb(238, 238, 238);}
+.loading_radio{width:26px;}
+#selected_shop_wrapper{border:0;}
 
 
 /**************END RESPONSIVE ******************/

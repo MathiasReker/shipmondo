@@ -105,7 +105,7 @@
 }
 .pakkelabels_shipping_field
 {
-	max-width: 275px;
+	/* max-width: 275px; */
 	display:inline-block;
 }
 ul.pakkelabels-shoplist-ul {
@@ -208,7 +208,7 @@ ul.pakkelabels-shoplist-ul li.pakkelabels-shop-list:nth-last-of-type(2) {
 .pakkelabels-single-shop {
 	position:relative;
 	font-size: 16px;
-	line-height: 1.5em;
+	line-height: 18px;
 }
 .pakkelabels-single-shop .pakkelabels-radio-button{
 	display: -webkit-flex;
@@ -262,7 +262,7 @@ ul.pakkelabels-shoplist-ul li.pakkelabels-shop-list:nth-last-of-type(2) {
 
 /*dropdown design*/
 
-.pakkelabels-shoplist.dropdown .btn-primary ,.pts .pakkelabels-shoplist.dropdown .btn-primary{
+.pts .pakkelabels-shoplist.dropdown .btn-primary{
 	color: #fff;
 	background-color: #666666;
 	border: none;
@@ -425,6 +425,7 @@ ul.pakkelabels-shoplist-ul li.pakkelabels-shop-list:nth-last-of-type(2) {
 }
 
 
+
 /*Roohi*/
 #pakkelabels_find_shop_btn {
 	color: #fff;
@@ -440,14 +441,16 @@ ul.pakkelabels-shoplist-ul li.pakkelabels-shop-list:nth-last-of-type(2) {
 	background-color:#2e7a3a;
 	border:solid 1px #358c43;
 }
-.pakkelabels-shoplist .selected_content{font-size:12px;}
-.pakkelabels-shoplist-dropdownul.dropdown-menu{height:710px;overflow-y:scroll;overflow-x:hidden;}
 
-#selected_shop_wrapper{border:0px;}
+.pakkelabels-shoplist-dropdownul.dropdown-menu{overflow-y:scroll;overflow-x:hidden;height:700px;}
+#selected_shop_wrapper.add_border{border:1px solid rgb(238, 238, 238);}
 .loading_radio{width:26px;}
-#header{z-index:auto;}
+#selected_shop_wrapper{border:0;}
 
-
+@media (min-width: 768px) {
+	.pakkelabels-shop-list.adjstradio{width:47%;display:inline-block;}
+}
+.pakkelabels-shoplist.dropdown,.pakkelabels-popup{max-width:275px;}
 
 /**************END RESPONSIVE ******************/
 /**************END RESPONSIVE ******************/

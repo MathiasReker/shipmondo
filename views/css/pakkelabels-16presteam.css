@@ -262,7 +262,7 @@ ul.pakkelabels-shoplist-ul li.pakkelabels-shop-list:nth-last-of-type(2) {
 
 /*dropdown design*/
 
-.pakkelabels-shoplist.dropdown .btn-primary ,.pts .pakkelabels-shoplist.dropdown .btn-primary{
+.pts .pakkelabels-shoplist.dropdown .btn-primary{
 	color: #fff;
 	background-color: #666666;
 	border: none;
@@ -424,28 +424,34 @@ ul.pakkelabels-shoplist-ul li.pakkelabels-shop-list:nth-last-of-type(2) {
 
 }
 
-
 /*Roohi*/
 #pakkelabels_find_shop_btn {
 	color: #fff;
-	background-color: #43b155;
+	background-color: #428bca;
 	border-color: transparent;
-	border:1px solid #63c473;
+	border:1px solid #357ebd;
 	
 	font-weight:600;
 	width:100%;
 	padding:.5rem 1.25rem;
+	position:relative;
 }
 #pakkelabels_find_shop_btn:focus,#pakkelabels_find_shop_btn:hover{
-	background-color:#2e7a3a;
-	border:solid 1px #358c43;
+	opacity:0.8;
 }
-.pakkelabels-shoplist .selected_content{font-size:12px;}
-.pakkelabels-shoplist-dropdownul.dropdown-menu{height:710px;overflow-y:scroll;overflow-x:hidden;}
+.pakkelabels-shoplist .selected_content{font-size:14px;}
 
-#selected_shop_wrapper{border:0px;}
-.loading_radio{width:26px;}
+#pakkelabels_find_shop_btn .caret {
+	position: absolute;
+	right: 8px;
+	top: 14px;
+}
+.button.button-small span.caret{display:inline-block;}
+.pakkelabels-shoplist-dropdownul.dropdown-menu{height:700px;overflow-y:scroll;overflow-x:hidden;}
 #header{z-index:auto;}
+#selected_shop_wrapper.add_border{border:1px solid rgb(238, 238, 238);}
+.loading_radio{width:26px;}
+#selected_shop_wrapper{border:0;}
 
 
 

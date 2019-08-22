@@ -103,6 +103,7 @@
 .pakkelabels_shipping_field-wrap {
 	width:100%;
 	display:block;
+	padding:0 15px;
 }
 .pakkelabels_shipping_field
 {
@@ -262,14 +263,6 @@ ul.pakkelabels-shoplist-ul li.pakkelabels-shop-list:nth-last-of-type(2) {
 }
 /*dropdown design*/
 
-.pakkelabels-shoplist.dropdown .btn-primary {
-	color: #fff;
-	background-color: #666666 !important;
-	border: none;
-	width: 100%;
-	text-align: left;
-	font-weight: bold;
-}
 #selected_shop_wrapper {
 	padding: 5px 0;
 }
@@ -405,11 +398,32 @@ ul.pakkelabels-shoplist-ul li.pakkelabels-shop-list:nth-last-of-type(2) {
 @media (max-height: 540px) {
 
 }
+/*Roohi*/
+@media (min-width: 768px) {
+div#onepagecheckoutps #pakkelabels_find_shop_btn {padding:.5rem 1.25rem;}
+}
+div#onepagecheckoutps #pakkelabels_find_shop_btn {
+	color: #fff;
+	background-color: #2fb5d2;
+	border-color: transparent;
+	box-shadow:2px 2px 4px 0 rgba(0,0,0,.2);
+	text-transform:uppercase;
+	font-weight:600;
+	
+	width:auto;
+	font-size:94%;
+}
+#pakkelabels_find_shop_btn:focus,#pakkelabels_find_shop_btn:hover{
+	background-color:#2592a9;
+}
 
 
 
-
-
+.pakkelabels-shoplist .selected_content{font-size:12px;}
+.pakkelabels-shoplist-dropdownul.dropdown-menu{height:710px;overflow-y:scroll;overflow-x:hidden;}
+.delivery-option{font-size:.8125rem;}
+#selected_shop_wrapper{border:0px;}
+.loading_radio{width:26px;}
 
 /**************END RESPONSIVE ******************/
 /**************END RESPONSIVE ******************/
